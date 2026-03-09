@@ -20,15 +20,34 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
 
     if (!isOpen) return null;
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setStep("processing");
 
-        // Simulate API call
-        setTimeout(() => {
-            setStep("success");
-            clearCart();
-        }, 2000);
+        try {
+            const response = await fetch("/api/checkout", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    ...formData,
+                    cartItems,
+                    totalPrice,
+                }),
+            });
+
+            if (response.ok) {
+                setStep("success");
+                clearCart();
+            } else {
+                const errorData = await response.json();
+                alert(`Error: ${errorData.error || "Failed to process order"}`);
+                setStep("form");
+            }
+        } catch (error) {
+            console.error("Checkout error:", error);
+            alert("Something went wrong. Please try again.");
+            setStep("form");
+        }
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
