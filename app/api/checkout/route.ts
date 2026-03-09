@@ -48,7 +48,7 @@ export async function POST(req: Request) {
 
     // 2. Send confirmation email to Customer
     await resend.emails.send({
-      from: "Pearl International <onboarding@resend.dev>",
+      from: "Pearl International <Perl-International@resend.dev>",
       to: email,
       subject: "Order Confirmation - Pearl International",
       html: `
