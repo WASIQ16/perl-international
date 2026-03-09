@@ -1,8 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
-import { PRODUCTS } from "./data/products";
+import { useEffect, useState } from "react";
 import ProductCard from "./components/ProductCard";
 import CartDrawer from "./components/CartDrawer";
 import { useCart } from "./context/CartContext";
@@ -35,13 +34,30 @@ const CATEGORIES = [
 ];
 
 export default function Home() {
+  const [products, setProducts] = useState<any[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const { totalItems } = useCart();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch("/api/products");
+        const data = await res.json();
+        setProducts(data);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProducts();
+  }, []);
 
   const filteredProducts = selectedCategory
-    ? PRODUCTS.filter((p) => p.category === selectedCategory)
-    : PRODUCTS;
+    ? products.filter((p) => p.category === selectedCategory)
+    : products;
 
   const scrollToProducts = () => {
     document.getElementById("products")?.scrollIntoView({ behavior: "smooth" });
@@ -201,8 +217,8 @@ export default function Home() {
                 <button
                   onClick={() => setSelectedCategory(null)}
                   className={`px-6 py-2 rounded-full text-sm font-bold transition-all ${selectedCategory === null
-                      ? "bg-accent text-white shadow-lg shadow-blue-500/25"
-                      : "bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-accent"
+                    ? "bg-accent text-white shadow-lg shadow-blue-500/25"
+                    : "bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-accent"
                     }`}
                 >
                   All
@@ -212,8 +228,8 @@ export default function Home() {
                     key={cat.title}
                     onClick={() => setSelectedCategory(cat.title)}
                     className={`px-6 py-2 rounded-full text-sm font-bold transition-all ${selectedCategory === cat.title
-                        ? "bg-accent text-white shadow-lg shadow-blue-500/25"
-                        : "bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-accent"
+                      ? "bg-accent text-white shadow-lg shadow-blue-500/25"
+                      : "bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-accent"
                       }`}
                   >
                     {cat.title}
@@ -223,9 +239,16 @@ export default function Home() {
             </div>
 
             <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {filteredProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
+              {loading ? (
+                <div className="col-span-full py-24 text-center">
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent mx-auto mb-4" />
+                  <p className="text-xl text-secondary dark:text-slate-400">Loading products...</p>
+                </div>
+              ) : (
+                filteredProducts.map((product) => (
+                  <ProductCard key={product._id || product.id} product={product} />
+                ))
+              )}
             </div>
 
             {filteredProducts.length === 0 && (

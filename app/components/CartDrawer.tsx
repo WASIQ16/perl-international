@@ -1,8 +1,7 @@
-"use client";
-
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { useCart } from "../context/CartContext";
+import CheckoutModal from "./CheckoutModal";
 
 interface CartDrawerProps {
     isOpen: boolean;
@@ -11,9 +10,19 @@ interface CartDrawerProps {
 
 export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
     const { cartItems, removeFromCart, updateQuantity, totalPrice } = useCart();
+    const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+
+    const handleCheckout = () => {
+        onClose();
+        setIsCheckoutOpen(true);
+    };
 
     return (
         <>
+            <CheckoutModal
+                isOpen={isCheckoutOpen}
+                onClose={() => setIsCheckoutOpen(false)}
+            />
             {/* Overlay */}
             <div
                 className={`fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm transition-opacity duration-300 ${isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
@@ -116,7 +125,10 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                             <p className="text-xs text-secondary dark:text-slate-500">
                                 Shipping and taxes calculated at checkout.
                             </p>
-                            <button className="w-full h-14 rounded-xl bg-accent text-white font-bold hover:bg-blue-600 transition-all shadow-lg shadow-blue-500/25">
+                            <button
+                                onClick={handleCheckout}
+                                className="w-full h-14 rounded-xl bg-accent text-white font-bold hover:bg-blue-600 transition-all shadow-lg shadow-blue-500/25"
+                            >
                                 Checkout Now
                             </button>
                         </div>
