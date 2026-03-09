@@ -110,6 +110,18 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                                         />
                                     </div>
                                     <div className="space-y-2">
+                                        <label className="text-sm font-bold dark:text-white">City</label>
+                                        <input
+                                            required
+                                            name="city"
+                                            value={formData.city}
+                                            onChange={handleChange}
+                                            type="text"
+                                            placeholder="New York"
+                                            className="w-full rounded-xl border border-slate-200 bg-slate-50 p-4 outline-none focus:border-accent dark:border-slate-800 dark:bg-slate-800 dark:text-white transition-all"
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
                                         <label className="text-sm font-bold dark:text-white">Shipping Address</label>
                                         <textarea
                                             required

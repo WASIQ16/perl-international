@@ -4,31 +4,31 @@ import { NextResponse } from "next/server";
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(req: Request) {
-    try {
-        const { fullName, email, address, city, cartItems, totalPrice } = await req.json();
+  try {
+    const { fullName, email, address, city, cartItems, totalPrice } = await req.json();
 
-        if (!fullName || !email || !address || !cartItems) {
-            return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
-        }
+    if (!fullName || !email || !address || !cartItems) {
+      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+    }
 
-        // Format the order items for the email
-        const itemsHtml = cartItems
-            .map(
-                (item: any) => `
+    // Format the order items for the email
+    const itemsHtml = cartItems
+      .map(
+        (item: any) => `
         <div style="margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
           <strong>${item.name}</strong> x ${item.quantity}<br/>
           Price: $${item.price.toFixed(2)} | Subtotal: $${(item.price * item.quantity).toFixed(2)}
         </div>
       `
-            )
-            .join("");
+      )
+      .join("");
 
-        // 1. Send email to Admin (Notification)
-        await resend.emails.send({
-            from: "Order Alert <onboarding@resend.dev>",
-            to: "wasiqeuroshub@gmail.com", // Assuming this is your admin email
-            subject: `New Order from ${fullName}`,
-            html: `
+    // 1. Send email to Admin (Notification)
+    await resend.emails.send({
+      from: "Order Alert <onboarding@resend.dev>",
+      to: "wasiq.euroshub@gmail.com", // Updated to corrected admin email
+      subject: `New Order from ${fullName}`,
+      html: `
         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; padding: 20px; border-radius: 10px;">
           <h1 style="color: #2563eb; margin-top: 0;">New Order Received!</h1>
           <p>You have a new order from <strong>${fullName}</strong> (${email}).</p>
@@ -44,14 +44,14 @@ export async function POST(req: Request) {
           </div>
         </div>
       `,
-        });
+    });
 
-        // 2. Send confirmation email to Customer
-        await resend.emails.send({
-            from: "Pearl International <onboarding@resend.dev>",
-            to: email,
-            subject: "Order Confirmation - Pearl International",
-            html: `
+    // 2. Send confirmation email to Customer
+    await resend.emails.send({
+      from: "Pearl International <onboarding@resend.dev>",
+      to: email,
+      subject: "Order Confirmation - Pearl International",
+      html: `
         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; padding: 20px; border-radius: 10px;">
           <h1 style="color: #2563eb; margin-top: 0;">Order Confirmed!</h1>
           <p>Hi <strong>${fullName}</strong>, thank you for shopping with Pearl International. Your order has been placed successfully.</p>
@@ -68,11 +68,11 @@ export async function POST(req: Request) {
           </p>
         </div>
       `,
-        });
+    });
 
-        return NextResponse.json({ success: true });
-    } catch (error: any) {
-        console.error("Order processing error:", error);
-        return NextResponse.json({ error: error.message }, { status: 500 });
-    }
+    return NextResponse.json({ success: true });
+  } catch (error: any) {
+    console.error("Order processing error:", error);
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
 }
