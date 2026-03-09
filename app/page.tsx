@@ -1,4 +1,11 @@
+"use client";
+
 import Image from "next/image";
+import { useState } from "react";
+import { PRODUCTS } from "./data/products";
+import ProductCard from "./components/ProductCard";
+import CartDrawer from "./components/CartDrawer";
+import { useCart } from "./context/CartContext";
 
 const CATEGORIES = [
   {
@@ -28,19 +35,70 @@ const CATEGORIES = [
 ];
 
 export default function Home() {
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const { totalItems } = useCart();
+
+  const filteredProducts = selectedCategory
+    ? PRODUCTS.filter((p) => p.category === selectedCategory)
+    : PRODUCTS;
+
+  const scrollToProducts = () => {
+    document.getElementById("products")?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const handleCategoryClick = (category: string) => {
+    setSelectedCategory(category);
+    setTimeout(scrollToProducts, 100);
+  };
+
   return (
     <div className="min-h-screen hero-gradient">
+      <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
+
       {/* Navigation */}
       <nav className="fixed top-0 z-50 w-full bg-background/95 backdrop-blur-sm border-b border-slate-100 dark:border-slate-800">
         <div className="container mx-auto flex h-20 items-center justify-between px-6">
           <div className="text-2xl font-bold tracking-tighter text-primary dark:text-white">
             Pearl International
           </div>
-          <div className="hidden space-x-8 text-sm font-medium md:flex">
+          <div className="hidden space-x-8 text-sm font-medium md:flex items-center">
             <a href="#home" className="hover:text-accent transition-colors">Home </a>
             <a href="#categories" className="hover:text-accent transition-colors">Categories</a>
+            <a href="#products" className="hover:text-accent transition-colors">Products</a>
             <a href="#about" className="hover:text-accent transition-colors">About</a>
             <a href="#contact" className="hover:text-accent transition-colors">Contact</a>
+
+            <button
+              onClick={() => setIsCartOpen(true)}
+              className="relative rounded-full p-2 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            >
+              <svg className="h-6 w-6 dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+              </svg>
+              {totalItems > 0 && (
+                <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-accent text-[10px] font-bold text-white shadow-lg">
+                  {totalItems}
+                </span>
+              )}
+            </button>
+          </div>
+
+          {/* Mobile Cart Button */}
+          <div className="md:hidden">
+            <button
+              onClick={() => setIsCartOpen(true)}
+              className="relative rounded-full p-2 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            >
+              <svg className="h-6 w-6 dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+              </svg>
+              {totalItems > 0 && (
+                <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-accent text-[10px] font-bold text-white">
+                  {totalItems}
+                </span>
+              )}
+            </button>
           </div>
         </div>
       </nav>
@@ -68,10 +126,16 @@ export default function Home() {
               Pearl International is your premier general order supplier, delivering excellence across stationery, electronics, crockery, and more.
             </p>
             <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <button className="h-14 w-48 rounded-full bg-accent text-white font-semibold hover:bg-blue-600 transition-all shadow-lg shadow-blue-500/25">
-                Explore Products
+              <button
+                onClick={scrollToProducts}
+                className="h-14 w-48 rounded-full bg-accent text-white font-semibold hover:bg-blue-600 transition-all shadow-lg shadow-blue-500/25"
+              >
+                Shop Now
               </button>
-              <button className="h-14 w-48 rounded-full border border-slate-200 bg-white/50 dark:bg-slate-900/50 backdrop-blur font-semibold hover:bg-white dark:hover:bg-slate-800 transition-all">
+              <button
+                onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
+                className="h-14 w-48 rounded-full border border-slate-200 bg-white/50 dark:bg-slate-900/50 backdrop-blur font-semibold hover:bg-white dark:hover:bg-slate-800 transition-all"
+              >
                 Contact Us
               </button>
             </div>
@@ -79,9 +143,9 @@ export default function Home() {
         </section>
 
         {/* Categories Section */}
-        <section id="categories" className="py-32 bg-background">
+        <section id="categories" className="py-24 bg-background">
           <div className="container mx-auto px-6">
-            <div className="mb-20 text-center">
+            <div className="mb-16 text-center">
               <h2 className="mb-4 text-4xl font-bold dark:text-white">Our Product Categories</h2>
               <div className="mx-auto h-1 w-20 bg-accent rounded-full" />
             </div>
@@ -90,7 +154,8 @@ export default function Home() {
               {CATEGORIES.map((cat, idx) => (
                 <div
                   key={idx}
-                  className={`group relative overflow-hidden rounded-3xl bg-gradient-to-br ${cat.color} p-8 hover-lift border border-slate-100 dark:border-slate-800 shadow-sm`}
+                  onClick={() => handleCategoryClick(cat.title)}
+                  className={`group relative overflow-hidden rounded-3xl bg-gradient-to-br ${cat.color} p-8 hover-lift border border-slate-100 dark:border-slate-800 shadow-sm cursor-pointer`}
                 >
                   <div className="relative z-10">
                     <div className="mb-6 h-48 w-full overflow-hidden rounded-2xl">
@@ -107,7 +172,7 @@ export default function Home() {
                       {cat.description}
                     </p>
                     <button className="mt-6 flex items-center text-sm font-bold text-accent group-hover:underline">
-                      View More
+                      Browse Category
                       <svg className="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                       </svg>
@@ -119,8 +184,60 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Products Section */}
+        <section id="products" className="py-24 bg-slate-50 dark:bg-slate-900/30">
+          <div className="container mx-auto px-6">
+            <div className="mb-16 flex flex-col md:flex-row items-center justify-between gap-8">
+              <div>
+                <h2 className="text-4xl font-bold dark:text-white mb-2">
+                  {selectedCategory || "All Products"}
+                </h2>
+                <p className="text-secondary dark:text-slate-400">
+                  Explore our premium selection of high-quality items.
+                </p>
+              </div>
+
+              <div className="flex flex-wrap items-center justify-center gap-2">
+                <button
+                  onClick={() => setSelectedCategory(null)}
+                  className={`px-6 py-2 rounded-full text-sm font-bold transition-all ${selectedCategory === null
+                      ? "bg-accent text-white shadow-lg shadow-blue-500/25"
+                      : "bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-accent"
+                    }`}
+                >
+                  All
+                </button>
+                {CATEGORIES.map((cat) => (
+                  <button
+                    key={cat.title}
+                    onClick={() => setSelectedCategory(cat.title)}
+                    className={`px-6 py-2 rounded-full text-sm font-bold transition-all ${selectedCategory === cat.title
+                        ? "bg-accent text-white shadow-lg shadow-blue-500/25"
+                        : "bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-accent"
+                      }`}
+                  >
+                    {cat.title}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {filteredProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+
+            {filteredProducts.length === 0 && (
+              <div className="py-24 text-center">
+                <p className="text-xl text-secondary dark:text-slate-400">No products found in this category.</p>
+              </div>
+            )}
+          </div>
+        </section>
+
         {/* About Us Section */}
-        <section id="about" className="py-32 bg-slate-50 dark:bg-slate-900/50">
+        <section id="about" className="py-32 bg-background">
           <div className="container mx-auto px-6">
             <div className="grid gap-16 lg:grid-cols-2 items-center">
               <div className="relative h-[500px] overflow-hidden rounded-[3rem] shadow-2xl">
@@ -156,7 +273,7 @@ export default function Home() {
         </section>
 
         {/* Contact Us Section */}
-        <section id="contact" className="py-32">
+        <section id="contact" className="py-32 bg-slate-50 dark:bg-slate-900/50">
           <div className="container mx-auto px-6">
             <div className="mb-20 text-center">
               <h2 className="mb-4 text-4xl font-bold dark:text-white">Get In Touch</h2>
@@ -189,7 +306,7 @@ export default function Home() {
               </div>
 
               <div className="space-y-8">
-                <div className="rounded-3xl bg-slate-50 p-8 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800">
+                <div className="rounded-3xl bg-white p-8 dark:bg-slate-900 border border-slate-100 dark:border-slate-800">
                   <h3 className="mb-6 text-xl font-bold dark:text-white">Contact Info</h3>
                   <div className="space-y-6">
                     <div className="flex items-start gap-4">
@@ -227,7 +344,7 @@ export default function Home() {
         </section>
 
         {/* Call to Action */}
-        <section className="py-24">
+        <section className="py-24 bg-background">
           <div className="container mx-auto px-6">
             <div className="rounded-[3rem] bg-primary p-12 text-center text-white shadow-2xl md:p-24 relative overflow-hidden">
               <div className="absolute inset-0 bg-blue-500/20 blur-3xl -z-10 animate-pulse" />
@@ -235,7 +352,10 @@ export default function Home() {
               <p className="mx-auto mb-10 max-w-xl text-lg text-slate-300">
                 Get high-quality supplies delivered on time, every time. Contact our sales team for a custom quote.
               </p>
-              <button className="h-16 w-64 rounded-xl bg-white text-primary font-bold hover:bg-slate-100 transition-all text-black">
+              <button
+                onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
+                className="h-16 w-64 rounded-xl bg-white text-primary font-bold hover:bg-slate-100 transition-all text-black"
+              >
                 Get a Quote Now
               </button>
             </div>
@@ -244,7 +364,7 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-slate-100 py-12 dark:border-slate-800">
+      <footer className="border-t border-slate-100 py-12 dark:border-slate-800 bg-background">
         <div className="container mx-auto px-6 text-center">
           <div className="text-xl font-bold tracking-tighter text-primary dark:text-white mb-4">
             Pearl International
