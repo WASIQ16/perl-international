@@ -68,7 +68,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                             </div>
                         ) : (
                             cartItems.map((item) => (
-                                <div key={item.id} className="flex gap-4">
+                                <div key={item._id || item.id} className="flex gap-4">
                                     <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-xl border border-slate-100 dark:border-slate-800">
                                         <Image
                                             src={item.image}
@@ -85,7 +85,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                                         <div className="flex items-center justify-between">
                                             <div className="flex items-center gap-3 rounded-lg border border-slate-200 dark:border-slate-700 px-2 py-1">
                                                 <button
-                                                    onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                                                    onClick={() => updateQuantity(item._id || item.id, item.quantity - 1)}
                                                     className="text-slate-500 hover:text-accent"
                                                 >
                                                     <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -94,7 +94,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                                                 </button>
                                                 <span className="text-sm font-bold dark:text-white w-4 text-center">{item.quantity}</span>
                                                 <button
-                                                    onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                                                    onClick={() => updateQuantity(item._id || item.id, item.quantity + 1)}
                                                     className="text-slate-500 hover:text-accent"
                                                 >
                                                     <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -103,7 +103,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                                                 </button>
                                             </div>
                                             <button
-                                                onClick={() => removeFromCart(item.id)}
+                                                onClick={() => removeFromCart(item._id || item.id)}
                                                 className="text-xs font-bold text-red-500 hover:underline"
                                             >
                                                 Remove

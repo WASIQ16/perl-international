@@ -115,7 +115,7 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                                     <h3 className="mb-4 font-bold dark:text-white">Order Summary</h3>
                                     <div className="max-h-60 overflow-y-auto space-y-4 mb-6 pr-2">
                                         {cartItems.map((item) => (
-                                            <div key={item.id} className="flex justify-between text-sm">
+                                            <div key={item._id || item.id} className="flex justify-between text-sm">
                                                 <span className="text-secondary dark:text-slate-400">
                                                     {item.name} <span className="font-bold">x{item.quantity}</span>
                                                 </span>
