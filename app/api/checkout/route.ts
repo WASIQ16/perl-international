@@ -25,7 +25,7 @@ export async function POST(req: Request) {
 
     // 1. Send email to Admin (Notification)
     await resend.emails.send({
-      from: "Order Alert <onboarding@resend.dev>",
+      from: "Order Alert <Perl-International@resend.dev>",
       to: "wasiq.euroshub@gmail.com", // Updated to corrected admin email
       subject: `New Order from ${fullName}`,
       html: `
