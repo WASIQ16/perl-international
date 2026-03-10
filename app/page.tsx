@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import ProductCard from "./components/ProductCard";
 import CartDrawer from "./components/CartDrawer";
+import NavDrawer from "./components/NavDrawer";
 import { useCart } from "./context/CartContext";
 
 const CATEGORIES = [
@@ -37,6 +38,7 @@ export default function Home() {
   const [products, setProducts] = useState<any[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isNavOpen, setIsNavOpen] = useState(false);
   const { totalItems } = useCart();
   const [loading, setLoading] = useState(true);
 
@@ -71,6 +73,7 @@ export default function Home() {
   return (
     <div className="min-h-screen hero-gradient">
       <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
+      <NavDrawer isOpen={isNavOpen} onClose={() => setIsNavOpen(false)} />
 
       {/* Navigation */}
       <nav className="fixed top-0 z-50 w-full bg-background/95 backdrop-blur-sm border-b border-slate-100 dark:border-slate-800">
@@ -94,17 +97,20 @@ export default function Home() {
 
           {/* Right: Navigation & Cart */}
           <div className="flex justify-end items-center gap-4 md:gap-8">
-            <div className="hidden space-x-6 lg:space-x-8 text-sm font-medium md:flex items-center">
-              <a href="#home" className="hover:text-accent transition-colors">Home </a>
-              <a href="#categories" className="hover:text-accent transition-colors">Categories</a>
-              <a href="#products" className="hover:text-accent transition-colors">Products</a>
-              <a href="#about" className="hover:text-accent transition-colors">About</a>
-              <a href="#contact" className="hover:text-accent transition-colors">Contact</a>
-            </div>
+            <button
+              id="nav-menu-trigger"
+              onClick={() => setIsNavOpen(true)}
+              className="flex items-center gap-2 rounded-xl px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-800 transition-transform active:scale-95 group"
+            >
+              <span className="hidden md:block text-sm font-bold dark:text-white group-hover:text-accent">Explore</span>
+              <svg className="h-6 w-6 dark:text-white group-hover:text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
+              </svg>
+            </button>
 
             <button
               onClick={() => setIsCartOpen(true)}
-              className="relative rounded-full p-2 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              className="relative rounded-full p-2 hover:bg-slate-100 dark:hover:bg-slate-800 transition-transform active:scale-95"
             >
               <svg className="h-6 w-6 dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
