@@ -1,7 +1,15 @@
-import { Resend } from "resend";
+import nodemailer from "nodemailer";
 import { NextResponse } from "next/server";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const transporter = nodemailer.createTransport({
+  host: process.env.SMTP_HOST,
+  port: Number(process.env.SMTP_PORT),
+  secure: process.env.SMTP_PORT === "465", // true for 465, false for other ports
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASSWORD,
+  },
+});
 
 export async function POST(req: Request) {
   try {
@@ -23,68 +31,53 @@ export async function POST(req: Request) {
       )
       .join("");
 
-    // 1. Send email to Admin (Notification)
+    const emailContent = `
+        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; padding: 20px; border-radius: 10px;">
+          <h1 style="color: #2563eb; margin-top: 0;">Order Details</h1>
+          <p><strong>Customer Name:</strong> ${fullName}</p>
+          <p><strong>Customer Email:</strong> ${email}</p>
+          
+          <h2 style="border-bottom: 2px solid #2563eb; padding-bottom: 5px;">Shipping Details</h2>
+          <p><strong>Address:</strong> ${address}, ${city}</p>
+          
+          <h2 style="border-bottom: 2px solid #2563eb; padding-bottom: 5px;">Order Summary</h2>
+          ${itemsHtml}
+          
+          <div style="margin-top: 20px; font-size: 1.25rem; font-weight: bold;">
+            Total Amount: <span style="color: #2563eb;">$${totalPrice.toFixed(2)}</span>
+          </div>
+        </div>
+    `;
+
+    // 1. Send email to Admin
     try {
-      await resend.emails.send({
-        from: "Order Alert <onboarding@resend.dev>",
+      await transporter.sendMail({
+        from: `"Pearl International Orders" <${process.env.SMTP_USER}>`,
         to: "wasiq.euroshub@gmail.com",
         subject: `New Order from ${fullName}`,
-        html: `
-          <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; padding: 20px; border-radius: 10px;">
-            <h1 style="color: #2563eb; margin-top: 0;">New Order Received!</h1>
-            <p>You have a new order from <strong>${fullName}</strong> (${email}).</p>
-            
-            <h2 style="border-bottom: 2px solid #2563eb; padding-bottom: 5px;">Shipping Details</h2>
-            <p><strong>Address:</strong> ${address}, ${city}</p>
-            
-            <h2 style="border-bottom: 2px solid #2563eb; padding-bottom: 5px;">Order Summary</h2>
-            ${itemsHtml}
-            
-            <div style="margin-top: 20px; font-size: 1.25rem; font-weight: bold;">
-              Total Amount: <span style="color: #2563eb;">$${totalPrice.toFixed(2)}</span>
-            </div>
-          </div>
-        `,
+        html: emailContent,
       });
-      console.log("Admin email sent successfully");
+      console.log("Admin email sent via Nodemailer");
     } catch (adminError: any) {
-      console.error("Failed to send admin email:", adminError);
-      // We don't throw here yet, but we should log it
+      console.error("Nodemailer Admin Error:", adminError);
     }
 
     // 2. Send confirmation email to Customer
     try {
-      await resend.emails.send({
-        from: "Pearl International <onboarding@resend.dev>",
+      await transporter.sendMail({
+        from: `"Pearl International" <${process.env.SMTP_USER}>`,
         to: email,
         subject: "Order Confirmation - Pearl International",
-        html: `
-          <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; padding: 20px; border-radius: 10px;">
-            <h1 style="color: #2563eb; margin-top: 0;">Order Confirmed!</h1>
-            <p>Hi <strong>${fullName}</strong>, thank you for shopping with Pearl International. Your order has been placed successfully.</p>
-            
-            <h2 style="border-bottom: 2px solid #2563eb; padding-bottom: 5px;">Your Order</h2>
-            ${itemsHtml}
-            
-            <div style="margin-top: 20px; font-size: 1.25rem; font-weight: bold;">
-              Total Price: <span style="color: #2563eb;">$${totalPrice.toFixed(2)}</span>
-            </div>
-            
-            <p style="margin-top: 30px; font-size: 0.8rem; color: #666;">
-              We will contact you soon with tracking details.
-            </p>
-          </div>
-        `,
+        html: emailContent,
       });
-      console.log("Customer confirmation email sent successfully");
+      console.log("Customer email sent via Nodemailer");
     } catch (customerError: any) {
-      console.warn("Failed to send customer confirmation email (likely sandbox restriction):", customerError.message);
-      // Do not throw error here, as the order itself was successfully received by admin
+      console.error("Nodemailer Customer Error:", customerError);
     }
 
     return NextResponse.json({ success: true });
   } catch (error: any) {
-    console.error("Order processing error:", error);
+    console.error("Checkout processing error:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
