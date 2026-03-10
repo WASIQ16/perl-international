@@ -180,8 +180,8 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                             </div>
                             <h2 className="text-4xl font-black dark:text-white">Order Confirmed!</h2>
                             <p className="mt-4 text-lg text-secondary dark:text-slate-400">
-                                Thank you for your purchase, **{formData.fullName}**! <br />
-                                We've sent a confirmation email to **{formData.email}**.
+                                Thank you for your purchase, <strong className="text-white">{formData.fullName}</strong>! <br />
+                                We've sent a confirmation email to <strong className="text-white">{formData.email}</strong>.
                             </p>
                             <button
                                 onClick={onClose}
