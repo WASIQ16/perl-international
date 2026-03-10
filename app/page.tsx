@@ -74,16 +74,33 @@ export default function Home() {
 
       {/* Navigation */}
       <nav className="fixed top-0 z-50 w-full bg-background/95 backdrop-blur-sm border-b border-slate-100 dark:border-slate-800">
-        <div className="container mx-auto flex h-20 items-center justify-between px-6">
-          <div className="text-2xl font-bold tracking-tighter text-primary dark:text-white">
+        <div className="container mx-auto grid grid-cols-3 h-20 items-center px-6">
+          {/* Left: Site Name */}
+          <div className="text-xl md:text-2xl font-black tracking-tighter text-primary dark:text-white">
             Pearl International
           </div>
-          <div className="hidden space-x-8 text-sm font-medium md:flex items-center">
-            <a href="#home" className="hover:text-accent transition-colors">Home </a>
-            <a href="#categories" className="hover:text-accent transition-colors">Categories</a>
-            <a href="#products" className="hover:text-accent transition-colors">Products</a>
-            <a href="#about" className="hover:text-accent transition-colors">About</a>
-            <a href="#contact" className="hover:text-accent transition-colors">Contact</a>
+
+          {/* Center: Logo */}
+          <div className="flex justify-center">
+            <Image
+              src="/logo.svg"
+              alt="Pearl International Logo"
+              width={180}
+              height={50}
+              className="h-16 md:h-20 w-auto object-contain"
+              priority
+            />
+          </div>
+
+          {/* Right: Navigation & Cart */}
+          <div className="flex justify-end items-center gap-4 md:gap-8">
+            <div className="hidden space-x-6 lg:space-x-8 text-sm font-medium md:flex items-center">
+              <a href="#home" className="hover:text-accent transition-colors">Home </a>
+              <a href="#categories" className="hover:text-accent transition-colors">Categories</a>
+              <a href="#products" className="hover:text-accent transition-colors">Products</a>
+              <a href="#about" className="hover:text-accent transition-colors">About</a>
+              <a href="#contact" className="hover:text-accent transition-colors">Contact</a>
+            </div>
 
             <button
               onClick={() => setIsCartOpen(true)}
@@ -94,23 +111,6 @@ export default function Home() {
               </svg>
               {totalItems > 0 && (
                 <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-accent text-[10px] font-bold text-white shadow-lg">
-                  {totalItems}
-                </span>
-              )}
-            </button>
-          </div>
-
-          {/* Mobile Cart Button */}
-          <div className="md:hidden">
-            <button
-              onClick={() => setIsCartOpen(true)}
-              className="relative rounded-full p-2 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-            >
-              <svg className="h-6 w-6 dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-              </svg>
-              {totalItems > 0 && (
-                <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-accent text-[10px] font-bold text-white">
                   {totalItems}
                 </span>
               )}
@@ -389,8 +389,17 @@ export default function Home() {
       {/* Footer */}
       <footer className="border-t border-slate-100 py-12 dark:border-slate-800 bg-background">
         <div className="container mx-auto px-6 text-center">
-          <div className="text-xl font-bold tracking-tighter text-primary dark:text-white mb-4">
+          <div className="text-2xl font-black tracking-tighter text-primary dark:text-white mb-2 uppercase">
             Pearl International
+          </div>
+          <div className="flex justify-center mb-6">
+            <Image
+              src="/logo.svg"
+              alt="Pearl International Logo"
+              width={150}
+              height={40}
+              className="h-10 w-auto object-contain"
+            />
           </div>
           <p className="text-sm text-secondary dark:text-slate-500">
             © {new Date().getFullYear()} Pearl International. All rights reserved.
