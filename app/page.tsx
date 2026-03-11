@@ -410,6 +410,9 @@ export default function Home() {
           <p className="text-sm text-secondary dark:text-slate-500">
             © {new Date().getFullYear()} Pearl International. All rights reserved.
           </p>
+          <div className="mt-4">
+            <a href="/admin" className="text-xs font-bold text-slate-400 hover:text-primary transition-colors uppercase tracking-widest">Admin Portal</a>
+          </div>
         </div>
       </footer>
     </div>

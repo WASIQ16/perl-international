@@ -1,5 +1,7 @@
 import nodemailer from "nodemailer";
 import { NextResponse } from "next/server";
+import dbConnect from "@/lib/db";
+import Order from "@/models/Order";
 
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
@@ -13,10 +15,35 @@ const transporter = nodemailer.createTransport({
 
 export async function POST(req: Request) {
   try {
+    await dbConnect();
     const { fullName, email, address, city, cartItems, totalPrice } = await req.json();
 
     if (!fullName || !email || !address || !cartItems) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+    }
+
+    // 0. Save order to Database
+    let savedOrder;
+    try {
+      savedOrder = await Order.create({
+        fullName,
+        email,
+        address,
+        city,
+        cartItems: cartItems.map((item: any) => ({
+          productId: item._id || item.id,
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+          image: item.image
+        })),
+        totalPrice,
+        status: "Pending"
+      });
+      console.log("Order saved to database:", savedOrder._id);
+    } catch (dbError) {
+      console.error("Database Order Save Error:", dbError);
+      // We continue with email even if DB fails for now, or we could return error
     }
 
     // Format the order items for the email

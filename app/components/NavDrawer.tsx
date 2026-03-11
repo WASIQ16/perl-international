@@ -1,7 +1,8 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import { useTheme } from "../context/ThemeContext";
 
 interface NavDrawerProps {
     isOpen: boolean;
@@ -14,11 +15,18 @@ const NAV_LINKS = [
     { name: "Products", href: "#products" },
     { name: "About", href: "#about" },
     { name: "Contact", href: "#contact" },
+    { name: "Admin Portal", href: "/admin", isExternal: true },
 ];
 
 export default function NavDrawer({ isOpen, onClose }: NavDrawerProps) {
-    const handleLinkClick = (href: string) => {
+    const { theme, toggleTheme } = useTheme();
+
+    const handleLinkClick = (href: string, isExternal?: boolean) => {
         onClose();
+        if (isExternal) {
+            window.location.href = href;
+            return;
+        }
         const element = document.querySelector(href);
         if (element) {
             element.scrollIntoView({ behavior: "smooth" });
@@ -29,15 +37,13 @@ export default function NavDrawer({ isOpen, onClose }: NavDrawerProps) {
         <>
             {/* Overlay */}
             <div
-                className={`fixed inset-0 z-[110] bg-black/50 backdrop-blur-sm transition-opacity duration-300 ${isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
-                    }`}
+                className={`fixed inset-0 z-[110] bg-black/50 backdrop-blur-sm transition-opacity duration-300 ${isOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}
                 onClick={onClose}
             />
 
             {/* Drawer */}
             <div
-                className={`fixed left-0 top-0 z-[111] h-full w-full max-w-sm bg-white dark:bg-slate-900 shadow-2xl transition-transform duration-500 ease-out ${isOpen ? "translate-x-0" : "-translate-x-full"
-                    }`}
+                className={`fixed left-0 top-0 z-[111] h-full w-full max-w-sm bg-white dark:bg-slate-900 shadow-2xl transition-transform duration-500 ease-out ${isOpen ? "translate-x-0" : "-translate-x-full"}`}
             >
                 <div className="flex h-full flex-col">
                     {/* Header */}
@@ -67,7 +73,7 @@ export default function NavDrawer({ isOpen, onClose }: NavDrawerProps) {
                             {NAV_LINKS.map((link) => (
                                 <li key={link.name}>
                                     <button
-                                        onClick={() => handleLinkClick(link.href)}
+                                        onClick={() => handleLinkClick(link.href, (link as any).isExternal)}
                                         className="text-2xl font-black text-primary hover:text-accent dark:text-white dark:hover:text-accent transition-all transform hover:translate-x-2"
                                     >
                                         {link.name}
@@ -75,6 +81,35 @@ export default function NavDrawer({ isOpen, onClose }: NavDrawerProps) {
                                 </li>
                             ))}
                         </ul>
+
+                        {/* Dark / Light Toggle */}
+                        <div className="mt-10 pt-8 border-t border-slate-100 dark:border-slate-800">
+                            <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Appearance</p>
+                            <button
+                                onClick={toggleTheme}
+                                className="flex items-center justify-between w-full bg-slate-100 dark:bg-slate-800 px-5 py-4 rounded-2xl transition-all hover:bg-slate-200 dark:hover:bg-slate-700 group"
+                                aria-label="Toggle theme"
+                            >
+                                <span className="flex items-center gap-3">
+                                    {theme === "dark" ? (
+                                        <svg className="h-5 w-5 text-amber-400" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M12 7a5 5 0 100 10A5 5 0 0012 7z" strokeLinecap="round" strokeLinejoin="round" />
+                                        </svg>
+                                    ) : (
+                                        <svg className="h-5 w-5 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                                        </svg>
+                                    )}
+                                    <span className="font-bold text-slate-700 dark:text-slate-200 text-sm">
+                                        {theme === "dark" ? "Light Mode" : "Dark Mode"}
+                                    </span>
+                                </span>
+                                {/* Toggle pill */}
+                                <div className={`relative w-11 h-6 rounded-full transition-colors duration-300 ${theme === "dark" ? "bg-amber-400" : "bg-slate-400"}`}>
+                                    <div className={`absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform duration-300 ${theme === "dark" ? "translate-x-5" : "translate-x-0"}`} />
+                                </div>
+                            </button>
+                        </div>
                     </nav>
 
                     {/* Footer */}
