@@ -212,7 +212,7 @@ export default function AdminProducts() {
                             <div className="p-6">
                                 <div className="text-xs font-black text-blue-500 uppercase tracking-widest mb-1">{product.category}</div>
                                 <h3 className="font-bold text-slate-900 dark:text-white truncate mb-2">{product.name}</h3>
-                                <div className="text-xl font-black text-primary">${product.price.toFixed(2)}</div>
+                                <div className="text-xl font-black text-primary">Rs. {product.price.toFixed(2)}</div>
                             </div>
                         </div>
                     ))}
@@ -242,7 +242,7 @@ export default function AdminProducts() {
                                     <input required className="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-2xl px-5 py-3 focus:ring-2 focus:ring-primary transition-all font-medium text-slate-900 dark:text-white" placeholder="Enter product name" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} />
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-sm font-black text-slate-700 dark:text-slate-300 uppercase tracking-wider">Price ($)</label>
+                                    <label className="text-sm font-black text-slate-700 dark:text-slate-300 uppercase tracking-wider">Price (Rs.)</label>
                                     <input type="number" step="0.01" required className="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-2xl px-5 py-3 focus:ring-2 focus:ring-primary transition-all font-medium text-slate-900 dark:text-white" placeholder="0.00" value={formData.price} onChange={(e) => setFormData({ ...formData, price: e.target.value })} />
                                 </div>
                             </div>

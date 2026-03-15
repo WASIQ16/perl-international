@@ -137,7 +137,7 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                                         type="submit"
                                         className="w-full h-14 rounded-xl bg-accent text-white font-bold hover:bg-blue-600 transition-all shadow-lg shadow-blue-500/25"
                                     >
-                                        Place Order - ${totalPrice.toFixed(2)}
+                                        Place Order - Rs. {totalPrice.toFixed(2)}
                                     </button>
                                 </form>
 
@@ -150,13 +150,13 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                                                 <span className="text-secondary dark:text-slate-400">
                                                     {item.name} <span className="font-bold">x{item.quantity}</span>
                                                 </span>
-                                                <span className="font-bold dark:text-white">${(item.price * item.quantity).toFixed(2)}</span>
+                                                <span className="font-bold dark:text-white">Rs. {(item.price * item.quantity).toFixed(2)}</span>
                                             </div>
                                         ))}
                                     </div>
                                     <div className="border-t border-slate-200 dark:border-slate-700 pt-4 flex justify-between">
                                         <span className="font-bold dark:text-white">Total</span>
-                                        <span className="text-xl font-black text-accent">${totalPrice.toFixed(2)}</span>
+                                        <span className="text-xl font-black text-accent">Rs. {totalPrice.toFixed(2)}</span>
                                     </div>
                                 </div>
                             </div>

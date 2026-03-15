@@ -15,7 +15,6 @@ const NAV_LINKS = [
     { name: "Products", href: "#products" },
     { name: "About", href: "#about" },
     { name: "Contact", href: "#contact" },
-    { name: "Admin Portal", href: "/admin", isExternal: true },
 ];
 
 export default function NavDrawer({ isOpen, onClose }: NavDrawerProps) {

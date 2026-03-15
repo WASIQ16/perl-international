@@ -52,7 +52,7 @@ export async function POST(req: Request) {
         (item: any) => `
         <div style="margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
           <strong>${item.name}</strong> x ${item.quantity}<br/>
-          Price: $${item.price.toFixed(2)} | Subtotal: $${(item.price * item.quantity).toFixed(2)}
+          Price: Rs. ${item.price.toFixed(2)} | Subtotal: Rs. ${(item.price * item.quantity).toFixed(2)}
         </div>
       `
       )
@@ -71,7 +71,7 @@ export async function POST(req: Request) {
           ${itemsHtml}
           
           <div style="margin-top: 20px; font-size: 1.25rem; font-weight: bold;">
-            Total Amount: <span style="color: #2563eb;">$${totalPrice.toFixed(2)}</span>
+            Total Amount: <span style="color: #2563eb;">Rs. ${totalPrice.toFixed(2)}</span>
           </div>
         </div>
     `;
