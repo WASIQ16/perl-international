@@ -98,7 +98,7 @@ export default function AdminOrders() {
                                             </div>
                                         </td>
                                         <td className="px-8 py-6">
-                                            <div className="text-lg font-black text-slate-900 dark:text-white tracking-tighter">Rs. {order.totalPrice.toFixed(2)}</div>
+                                            <div className="text-lg font-black text-slate-900 dark:text-white tracking-tighter">${order.totalPrice.toFixed(2)}</div>
                                         </td>
                                         <td className="px-8 py-6 text-center">
                                             <div className="relative inline-block group">

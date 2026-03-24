@@ -15,7 +15,6 @@ export default function AdminLayout({
     const pathname = usePathname();
     const router = useRouter();
     const [authorized, setAuthorized] = useState(false);
-    const { theme, toggleTheme } = useTheme();
 
     useEffect(() => {
         // Simple client-side check for the cookie (though httpOnly cookies aren't accessible)
@@ -51,6 +50,8 @@ export default function AdminLayout({
         document.cookie = "admin_session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         router.replace("/admin/login");
     };
+
+    const { theme, toggleTheme } = useTheme();
 
     const navItems = [
         { name: "Dashboard", href: "/admin", icon: (

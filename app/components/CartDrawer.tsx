@@ -80,7 +80,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                                     <div className="flex flex-1 flex-col justify-between py-1">
                                         <div>
                                             <h4 className="font-bold dark:text-white line-clamp-1">{item.name}</h4>
-                                            <p className="text-sm text-secondary dark:text-slate-400">Rs. {item.price.toFixed(2)}</p>
+                                            <p className="text-sm text-secondary dark:text-slate-400">${item.price.toFixed(2)}</p>
                                         </div>
                                         <div className="flex items-center justify-between">
                                             <div className="flex items-center gap-3 rounded-lg border border-slate-200 dark:border-slate-700 px-2 py-1">
@@ -120,7 +120,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                         <div className="border-t border-slate-100 dark:border-slate-800 p-6 space-y-4">
                             <div className="flex items-center justify-between">
                                 <span className="text-slate-500 dark:text-slate-400">Subtotal</span>
-                                <span className="text-2xl font-black dark:text-white">Rs. {totalPrice.toFixed(2)}</span>
+                                <span className="text-2xl font-black dark:text-white">${totalPrice.toFixed(2)}</span>
                             </div>
                             <p className="text-xs text-secondary dark:text-slate-500">
                                 Shipping and taxes calculated at checkout.

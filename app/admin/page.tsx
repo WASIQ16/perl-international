@@ -22,9 +22,7 @@ export default function AdminDashboard() {
                 const orders = await ordersRes.json();
                 const products = await productsRes.json();
                 
-                const totalRevenue = orders
-                    .filter((order: any) => order.status === "Delivered")
-                    .reduce((acc: number, order: any) => acc + order.totalPrice, 0);
+                const totalRevenue = orders.reduce((acc: number, order: any) => acc + order.totalPrice, 0);
                 const pendingOrders = orders.filter((order: any) => order.status === "Pending").length;
                 
                 setStats({
@@ -43,7 +41,7 @@ export default function AdminDashboard() {
     }, []);
 
     const cards = [
-        { name: "Total Revenue", value: `Rs. ${stats.totalRevenue.toFixed(2)}`, icon: "💰", color: "bg-emerald-50 text-emerald-600 border-emerald-100" },
+        { name: "Total Revenue", value: `$${stats.totalRevenue.toFixed(2)}`, icon: "💰", color: "bg-emerald-50 text-emerald-600 border-emerald-100" },
         { name: "Total Orders", value: stats.totalOrders, icon: "📦", color: "bg-blue-50 text-blue-600 border-blue-100" },
         { name: "Pending Orders", value: stats.pendingOrders, icon: "⏳", color: "bg-amber-50 text-amber-600 border-amber-100" },
         { name: "Total Products", value: stats.totalProducts, icon: "🏷️", color: "bg-indigo-50 text-indigo-600 border-indigo-100" },

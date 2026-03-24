@@ -33,7 +33,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
                 <div className="flex items-center justify-between">
                     <span className="text-2xl font-black text-primary dark:text-white">
-                        Rs. {product.price.toFixed(2)}
+                        ${product.price.toFixed(2)}
                     </span>
                     <button
                         onClick={() => addToCart(product)}
