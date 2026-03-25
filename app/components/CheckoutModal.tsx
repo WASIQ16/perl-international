@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { useCart } from "../context/CartContext";
+import { useSettings } from "../context/SettingsContext";
 
 interface CheckoutModalProps {
     isOpen: boolean;
@@ -10,6 +11,7 @@ interface CheckoutModalProps {
 
 export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
     const { cartItems, totalPrice, clearCart } = useCart();
+    const { showPrices } = useSettings();
     const [step, setStep] = useState<"form" | "processing" | "success">("form");
     const [formData, setFormData] = useState({
         fullName: "",
@@ -137,7 +139,7 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                                         type="submit"
                                         className="w-full h-16 rounded-2xl bg-[#2587a7] text-white font-black uppercase tracking-widest text-sm hover:bg-[#1e6d87] transition-all shadow-xl shadow-[#2587a7]/20 active:scale-95 mt-4"
                                     >
-                                        Place Order — ${totalPrice.toFixed(2)}
+                                        {showPrices ? `Place Order — Rs. ${totalPrice.toFixed(2)}` : "Request Quote"}
                                     </button>
                                 </form>
 
@@ -153,13 +155,21 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                                                     </span>
                                                     <span className="text-[10px] font-black text-[#2587a7] uppercase tracking-tighter">Qty: {item.quantity}</span>
                                                 </div>
-                                                <span className="font-black text-[#242553] ml-4 shrink-0">${(item.price * item.quantity).toFixed(2)}</span>
+                                                {showPrices ? (
+                                                    <span className="font-black text-[#242553] ml-4 shrink-0">Rs. {(item.price * item.quantity).toFixed(2)}</span>
+                                                ) : (
+                                                    <span className="font-black text-slate-400 ml-4 shrink-0 uppercase tracking-widest text-[10px]">TBD</span>
+                                                )}
                                             </div>
                                         ))}
                                     </div>
                                     <div className="border-t border-slate-100 pt-6 flex justify-between items-center">
                                         <span className="font-black text-slate-400 uppercase tracking-widest text-xs">Grand Total</span>
-                                        <span className="text-3xl font-black text-[#242553] tracking-tighter">${totalPrice.toFixed(2)}</span>
+                                        {showPrices ? (
+                                            <span className="text-3xl font-black text-[#242553] tracking-tighter">Rs. {totalPrice.toFixed(2)}</span>
+                                        ) : (
+                                            <span className="text-sm font-black text-[#242553] uppercase tracking-widest">To Be Determined</span>
+                                        )}
                                     </div>
                                 </div>
                             </div>

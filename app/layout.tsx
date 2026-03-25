@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "./context/CartContext";
 import { ThemeProvider } from "./context/ThemeContext";
+import { SettingsProvider } from "./context/SettingsContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,9 +33,11 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <ThemeProvider>
-          <CartProvider>
-            {children}
-          </CartProvider>
+          <SettingsProvider>
+            <CartProvider>
+              {children}
+            </CartProvider>
+          </SettingsProvider>
         </ThemeProvider>
       </body>
     </html>

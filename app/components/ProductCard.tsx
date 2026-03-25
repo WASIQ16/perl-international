@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { Product } from "../data/products";
 import { useCart } from "../context/CartContext";
+import { useSettings } from "../context/SettingsContext";
 
 interface ProductCardProps {
     product: Product;
@@ -10,6 +11,7 @@ interface ProductCardProps {
 
 export default function ProductCard({ product }: ProductCardProps) {
     const { addToCart } = useCart();
+    const { showPrices } = useSettings();
 
     return (
         <div className="group relative rounded-[2rem] bg-white border border-slate-100 p-4 transition-all duration-500 hover:shadow-2xl hover:shadow-[#242553]/5 hover:-translate-y-2 hover:border-[#2587a7]/20">
@@ -31,10 +33,16 @@ export default function ProductCard({ product }: ProductCardProps) {
                     {product.description}
                 </p>
 
-                <div className="flex items-center justify-between">
-                    <span className="text-2xl font-black text-[#242553]">
-                        ${product.price.toFixed(2)}
-                    </span>
+                <div className="flex items-center justify-between mt-auto">
+                    {showPrices ? (
+                        <span className="text-2xl font-black text-[#242553]">
+                            Rs. {product.price.toFixed(2)}
+                        </span>
+                    ) : (
+                        <span className="text-sm font-bold text-slate-400 uppercase tracking-widest">
+                            Price on Request
+                        </span>
+                    )}
                     <button
                         onClick={() => addToCart(product)}
                         className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#2587a7] text-white shadow-lg shadow-[#2587a7]/30 transition-all hover:bg-[#1e6d87] active:scale-95 group-hover:rotate-6"

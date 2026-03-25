@@ -68,9 +68,15 @@ export default function AdminDashboard() {
                                 <span className="text-2xl">{card.icon}</span>
                                 <span className={`text-xs font-black uppercase tracking-widest ${card.color.split(' ')[1]}`}>{card.name}</span>
                             </div>
-                            <div className="text-3xl font-black text-[#242553] tracking-tighter">
-                                {card.value}
-                            </div>
+                            {card.name === "Total Revenue" ? (
+                                <div className="text-4xl font-black text-[#242553] mb-1">
+                                    {card.value}
+                                </div>
+                            ) : (
+                                <div className="text-3xl font-black text-[#242553] tracking-tighter">
+                                    {card.value}
+                                </div>
+                            )}
                         </div>
                     ))}
                 </div>

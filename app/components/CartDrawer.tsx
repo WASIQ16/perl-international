@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { useCart } from "../context/CartContext";
+import { useSettings } from "../context/SettingsContext";
 import CheckoutModal from "./CheckoutModal";
 
 interface CartDrawerProps {
@@ -10,6 +11,7 @@ interface CartDrawerProps {
 
 export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
     const { cartItems, removeFromCart, updateQuantity, totalPrice } = useCart();
+    const { showPrices } = useSettings();
     const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
 
     const handleCheckout = () => {
@@ -80,7 +82,11 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                                     <div className="flex flex-1 flex-col justify-center py-1">
                                         <div className="mb-3">
                                             <h4 className="font-black text-[#242553] line-clamp-1 mb-1">{item.name}</h4>
-                                            <p className="text-sm text-[#2587a7] font-black tracking-tight">${item.price.toFixed(2)}</p>
+                                            {showPrices ? (
+                                                <p className="text-sm text-[#2587a7] font-black tracking-tight">Rs. {item.price.toFixed(2)}</p>
+                                            ) : (
+                                                <p className="text-xs text-slate-400 font-bold uppercase tracking-widest">Price on Request</p>
+                                            )}
                                         </div>
                                         <div className="flex items-center justify-between">
                                             <div className="flex items-center gap-4 rounded-xl bg-slate-50 px-3 py-1.5">
@@ -120,7 +126,11 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                         <div className="border-t border-slate-100 p-8 space-y-6 bg-slate-50/50">
                             <div className="flex items-center justify-between">
                                 <span className="text-slate-500 font-medium">Subtotal</span>
-                                <span className="text-3xl font-black text-[#242553] tracking-tighter">${totalPrice.toFixed(2)}</span>
+                                {showPrices ? (
+                                    <span className="text-3xl font-black text-[#242553] tracking-tighter">Rs. {totalPrice.toFixed(2)}</span>
+                                ) : (
+                                    <span className="text-lg font-black text-[#242553] uppercase tracking-widest">Request Quote</span>
+                                )}
                             </div>
                             <p className="text-xs text-slate-400 font-medium leading-relaxed">
                                 Complimentary shipping on all premium orders. 

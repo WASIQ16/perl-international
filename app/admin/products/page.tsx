@@ -210,7 +210,7 @@ export default function AdminProducts() {
                             <div className="p-6">
                                 <div className="text-xs font-black text-[#2587a7] uppercase tracking-widest mb-1">{product.category}</div>
                                 <h3 className="font-bold text-[#242553] truncate mb-2">{product.name}</h3>
-                                <div className="text-xl font-black text-[#242553]">${product.price.toFixed(2)}</div>
+                                <div className="text-xl font-black text-[#242553]">Rs. {product.price.toFixed(2)}</div>
                             </div>
                         </div>
                     ))}
