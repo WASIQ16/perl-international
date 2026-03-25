@@ -3,6 +3,9 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useTheme } from "../context/ThemeContext";
+import { CATEGORIES } from "../data/categories";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface NavDrawerProps {
     isOpen: boolean;
@@ -21,16 +24,29 @@ const NAV_LINKS = [
 export default function NavDrawer({ isOpen, onClose }: NavDrawerProps) {
     const { theme, toggleTheme } = useTheme();
 
+    const router = useRouter();
+
+    const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
+
     const handleLinkClick = (href: string, isExternal?: boolean) => {
         onClose();
         if (isExternal) {
-            window.location.href = href;
+            window.open(href, "_blank");
             return;
         }
-        const element = document.querySelector(href);
-        if (element) {
-            element.scrollIntoView({ behavior: "smooth" });
+        if (href.startsWith("#")) {
+            const element = document.querySelector(href);
+            if (element) {
+                element.scrollIntoView({ behavior: "smooth" });
+            }
+        } else {
+            router.push(href);
         }
+    };
+
+    const handleCategoryClick = (slug: string) => {
+        onClose();
+        router.push(`/category/${slug}`);
     };
 
     return (
@@ -73,13 +89,56 @@ export default function NavDrawer({ isOpen, onClose }: NavDrawerProps) {
                             {NAV_LINKS.map((link) => (
                                 <li key={link.name}>
                                     <button
-                                        onClick={() => handleLinkClick(link.href, (link as any).isExternal)}
+                                        onClick={() => handleLinkClick(link.href, link.isExternal)}
                                         className="text-2xl font-black text-primary hover:text-accent dark:text-white dark:hover:text-accent transition-all transform hover:translate-x-2"
                                     >
                                         {link.name}
                                     </button>
                                 </li>
                             ))}
+
+                            {/* Categories Dropdown */}
+                            <li>
+                                <button
+                                    onClick={() => setIsCategoriesOpen(!isCategoriesOpen)}
+                                    className="flex w-full items-center justify-between text-2xl font-black text-primary hover:text-accent dark:text-white dark:hover:text-accent transition-all transform hover:translate-x-2"
+                                >
+                                    <span>Categories</span>
+                                    <svg
+                                        className={`h-6 w-6 transition-transform duration-300 ${isCategoriesOpen ? "rotate-180" : ""}`}
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </button>
+
+                                <div className={`grid transition-all duration-300 ease-in-out ${isCategoriesOpen ? "grid-rows-[1fr] mt-6 opacity-100" : "grid-rows-[0fr] mt-0 opacity-0 overflow-hidden"}`}>
+                                    <div className="min-h-0 grid gap-3 pl-4">
+                                        {CATEGORIES.map((cat) => (
+                                            <button
+                                                key={cat.slug}
+                                                onClick={() => handleCategoryClick(cat.slug)}
+                                                className="flex items-center gap-4 p-3 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all group group-hover:translate-x-1"
+                                            >
+                                                <div className={`h-10 w-10 shrink-0 overflow-hidden rounded-xl bg-gradient-to-br ${cat.color}`}>
+                                                    <Image
+                                                        src={cat.image}
+                                                        alt={cat.title}
+                                                        width={40}
+                                                        height={40}
+                                                        className="h-full w-full object-cover opacity-50 transition-transform group-hover:scale-110"
+                                                    />
+                                                </div>
+                                                <span className="font-bold text-slate-700 dark:text-slate-200 group-hover:text-accent transition-colors">
+                                                    {cat.title}
+                                                </span>
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            </li>
                         </ul>
 
                         {/* Dark / Light Toggle */}

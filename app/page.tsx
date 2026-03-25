@@ -7,34 +7,12 @@ import CartDrawer from "./components/CartDrawer";
 import NavDrawer from "./components/NavDrawer";
 import { useCart } from "./context/CartContext";
 
-const CATEGORIES = [
-  {
-    title: "Stationery",
-    description: "Premium office and school supplies for professional excellence.",
-    image: "/stationery_category_webp_1772550778032.png",
-    color: "from-blue-500/20 to-indigo-500/20",
-  },
-  {
-    title: "Electronics",
-    description: "Cutting-edge gadgets and essential tech hardware.",
-    image: "/electronics_category_webp_1772551058709.png",
-    color: "from-slate-700/20 to-slate-900/20",
-  },
-  {
-    title: "Crockery",
-    description: "Elegant dining sets and high-quality kitchenware.",
-    image: "/crockery_category_webp_1772551092105.png",
-    color: "from-amber-200/20 to-orange-200/20",
-  },
-  {
-    title: "Disposable Items",
-    description: "Eco-friendly and sustainable solutions for every occasion.",
-    image: "/hero_banner_perl.png",
-    color: "from-emerald-500/20 to-green-500/20",
-  },
-];
+import { CATEGORIES } from "./data/categories";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter();
   const [products, setProducts] = useState<any[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -65,9 +43,8 @@ export default function Home() {
     document.getElementById("products")?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const handleCategoryClick = (category: string) => {
-    setSelectedCategory(category);
-    setTimeout(scrollToProducts, 100);
+  const handleCategoryClick = (slug: string) => {
+    router.push(`/category/${slug}`);
   };
 
   return (
@@ -176,7 +153,7 @@ export default function Home() {
               {CATEGORIES.map((cat, idx) => (
                 <div
                   key={idx}
-                  onClick={() => handleCategoryClick(cat.title)}
+                  onClick={() => handleCategoryClick(cat.slug)}
                   className={`group relative overflow-hidden rounded-3xl bg-gradient-to-br ${cat.color} p-8 hover-lift border border-slate-100 dark:border-slate-800 shadow-sm cursor-pointer`}
                 >
                   <div className="relative z-10">
@@ -231,12 +208,9 @@ export default function Home() {
                 </button>
                 {CATEGORIES.map((cat) => (
                   <button
-                    key={cat.title}
-                    onClick={() => setSelectedCategory(cat.title)}
-                    className={`px-6 py-2 rounded-full text-sm font-bold transition-all ${selectedCategory === cat.title
-                      ? "bg-accent text-white shadow-lg shadow-blue-500/25"
-                      : "bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-accent"
-                      }`}
+                    key={cat.slug}
+                    onClick={() => handleCategoryClick(cat.slug)}
+                    className="px-6 py-2 rounded-full text-sm font-bold transition-all bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-accent"
                   >
                     {cat.title}
                   </button>
