@@ -16,7 +16,6 @@ const NAV_LINKS = [
     { name: "Products", href: "#products" },
     { name: "About", href: "#about" },
     { name: "Contact", href: "#contact" },
-    { name: "Admin Portal", href: "/admin", isExternal: true },
 ];
 
 export default function NavDrawer({ isOpen, onClose }: NavDrawerProps) {
@@ -58,14 +57,14 @@ export default function NavDrawer({ isOpen, onClose }: NavDrawerProps) {
             >
                 <div className="flex h-full flex-col">
                     {/* Header */}
-                    <div className="flex items-center justify-between border-b border-slate-100 p-8">
+                    <div className="flex items-center justify-between border-b border-slate-100 p-8 bg-[#fffffe]">
                         <div className="flex items-center gap-2">
                             <Image
                                 src="/logo.png"
                                 alt="Pearl International Logo"
-                                width={120}
-                                height={40}
-                                className="h-8 w-auto object-contain"
+                                width={210}
+                                height={70}
+                                className="h-20 w-auto object-contain"
                             />
                         </div>
                         <button
@@ -84,7 +83,7 @@ export default function NavDrawer({ isOpen, onClose }: NavDrawerProps) {
                             {NAV_LINKS.map((link) => (
                                 <li key={link.name}>
                                     <button
-                                        onClick={() => handleLinkClick(link.href, link.isExternal)}
+                                        onClick={() => handleLinkClick(link.href)}
                                         className="text-2xl font-black text-[#242553] hover:text-[#2587a7] transition-all transform hover:translate-x-2"
                                     >
                                         {link.name}

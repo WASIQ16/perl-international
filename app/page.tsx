@@ -384,9 +384,7 @@ export default function Home() {
           <p className="text-sm text-slate-400 font-medium">
             © {new Date().getFullYear()} Pearl International. Sourcing Excellence for the World.
           </p>
-          <div className="mt-6">
-            <a href="/admin" className="text-xs font-black text-slate-400 hover:text-[#2587a7] transition-all uppercase tracking-[0.2em]">Admin Portal</a>
-          </div>
+
         </div>
       </footer>
     </div>
