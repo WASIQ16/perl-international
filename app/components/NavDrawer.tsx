@@ -66,7 +66,7 @@ export default function NavDrawer({ isOpen, onClose }: NavDrawerProps) {
                     <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 p-6">
                         <div className="flex items-center gap-2">
                             <Image
-                                src="/logo.svg"
+                                src="/logo.png"
                                 alt="Pearl International Logo"
                                 width={120}
                                 height={40}

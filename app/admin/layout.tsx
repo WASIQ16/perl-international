@@ -83,7 +83,13 @@ export default function AdminLayout({
             <aside className="w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col fixed h-full z-10 transition-all">
                 <div className="p-6 border-b border-slate-100 dark:border-slate-800">
                     <div className="flex items-center gap-3">
-                        <Image src="/logo.svg" alt="Logo" width={32} height={32} />
+                        <Image
+                            src="/logo.png"
+                            alt="Admin Logo"
+                            width={120}
+                            height={40}
+                            className="h-8 w-auto object-contain"
+                        />
                         <span className="font-black text-xl tracking-tighter dark:text-white uppercase italic">Admin</span>
                     </div>
                 </div>

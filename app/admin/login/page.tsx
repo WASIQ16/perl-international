@@ -41,7 +41,14 @@ export default function AdminLogin() {
             <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-[3rem] shadow-2xl border border-slate-100 dark:border-slate-800 p-10 space-y-8 animate-in zoom-in-95 fade-in duration-500">
                 <div className="text-center">
                     <div className="flex justify-center mb-6">
-                        <Image src="/logo.svg" alt="Pearl International" width={180} height={50} className="h-12 w-auto object-contain" />
+                        <Image
+                            src="/logo.png"
+                            alt="Pearl International Logo"
+                            width={180}
+                            height={60}
+                            className="mx-auto h-12 w-auto object-contain"
+                            priority
+                        />
                     </div>
                     <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight italic uppercase">Admin Portal</h1>
                     <p className="text-slate-500 dark:text-slate-400 mt-2 font-medium">Please sign in to manage your empire.</p>

@@ -63,7 +63,7 @@ export default function Home() {
           {/* Center: Logo */}
           <div className="flex justify-center">
             <Image
-              src="/logo.svg"
+              src="/logo.png"
               alt="Pearl International Logo"
               width={180}
               height={50}
@@ -374,7 +374,7 @@ export default function Home() {
           </div>
           <div className="flex justify-center mb-6">
             <Image
-              src="/logo.svg"
+              src="/logo.png"
               alt="Pearl International Logo"
               width={150}
               height={40}

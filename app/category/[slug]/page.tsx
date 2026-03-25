@@ -64,7 +64,7 @@ export default function CategoryPage() {
           <div className="flex justify-center">
             <Link href="/">
               <Image
-                src="/logo.svg"
+                src="/logo.png"
                 alt="Pearl International Logo"
                 width={180}
                 height={50}
