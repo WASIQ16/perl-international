@@ -75,6 +75,11 @@ export default function AdminLayout({
         )},
     ];
 
+    // If user is on the login page, just return the content (no sidebar)
+    if (pathname === "/admin/login") {
+        return <>{children}</>;
+    }
+
     return (
         <div className="min-h-screen bg-slate-50 flex">
             {/* Sidebar */}
