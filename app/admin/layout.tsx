@@ -5,7 +5,6 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { useTheme } from "../context/ThemeContext";
 
 export default function AdminLayout({
     children,
@@ -41,8 +40,8 @@ export default function AdminLayout({
     }, [pathname, router]);
 
     if (!authorized && pathname !== "/admin/login") {
-        return <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-            <div className="h-10 w-10 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+        return <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+            <div className="h-10 w-10 border-4 border-[#2587a7] border-t-transparent rounded-full animate-spin" />
         </div>;
     }
 
@@ -51,7 +50,6 @@ export default function AdminLayout({
         router.replace("/admin/login");
     };
 
-    const { theme, toggleTheme } = useTheme();
 
     const navItems = [
         { name: "Dashboard", href: "/admin", icon: (
@@ -78,10 +76,10 @@ export default function AdminLayout({
     ];
 
     return (
-        <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex">
+        <div className="min-h-screen bg-slate-50 flex">
             {/* Sidebar */}
-            <aside className="w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col fixed h-full z-10 transition-all">
-                <div className="p-6 border-b border-slate-100 dark:border-slate-800">
+            <aside className="w-64 bg-white border-r border-slate-200 flex flex-col fixed h-full z-10 transition-all">
+                <div className="p-6 border-b border-slate-100">
                     <div className="flex items-center gap-3">
                         <Image
                             src="/logo.png"
@@ -90,7 +88,7 @@ export default function AdminLayout({
                             height={40}
                             className="h-8 w-auto object-contain"
                         />
-                        <span className="font-black text-xl tracking-tighter dark:text-white uppercase italic">Admin</span>
+                        <span className="font-black text-xl tracking-tighter text-[#242553] uppercase italic">Admin</span>
                     </div>
                 </div>
                 
@@ -101,8 +99,8 @@ export default function AdminLayout({
                             href={item.href}
                             className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all ${
                                 pathname === item.href
-                                    ? "bg-primary text-white shadow-lg shadow-blue-500/20 antialiased"
-                                    : "text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-primary dark:text-slate-400 dark:hover:text-white"
+                                    ? "bg-[#242553] text-white shadow-lg shadow-[#242553]/20"
+                                    : "text-slate-500 hover:bg-slate-50 hover:text-[#2587a7]"
                             }`}
                         >
                             {item.icon}
@@ -111,28 +109,10 @@ export default function AdminLayout({
                     ))}
                 </nav>
 
-                <div className="p-4 border-t border-slate-100 dark:border-slate-800 space-y-1">
-                    {/* Theme Toggle */}
-                    <button
-                        onClick={toggleTheme}
-                        className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all w-full text-left dark:text-slate-400"
-                        aria-label="Toggle theme"
-                    >
-                        {theme === "dark" ? (
-                            <svg className="h-5 w-5 text-amber-400" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M12 7a5 5 0 100 10A5 5 0 0012 7z" />
-                            </svg>
-                        ) : (
-                            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                            </svg>
-                        )}
-                        {theme === "dark" ? "Light Mode" : "Dark Mode"}
-                    </button>
-
+                <div className="p-4 border-t border-slate-100 space-y-1">
                     <button
                         onClick={handleLogout}
-                        className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 transition-all w-full text-left"
+                        className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-red-500 hover:bg-red-50 transition-all w-full text-left"
                     >
                         <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -142,7 +122,7 @@ export default function AdminLayout({
 
                     <Link
                         href="/"
-                        className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all dark:text-slate-400"
+                        className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50 hover:text-[#2587a7] transition-all"
                     >
                         <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />

@@ -12,35 +12,35 @@ export default function ProductCard({ product }: ProductCardProps) {
     const { addToCart } = useCart();
 
     return (
-        <div className="group relative rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 p-4 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2">
-            <div className="relative mb-4 h-64 w-full overflow-hidden rounded-2xl">
+        <div className="group relative rounded-[2rem] bg-white border border-slate-100 p-4 transition-all duration-500 hover:shadow-2xl hover:shadow-[#242553]/5 hover:-translate-y-2 hover:border-[#2587a7]/20">
+            <div className="relative mb-6 h-64 w-full overflow-hidden rounded-[1.5rem] bg-slate-50">
                 <Image
                     src={product.image}
                     alt={product.name}
                     fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-110"
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
                 />
-                <div className="absolute top-3 right-3 rounded-full bg-white/90 dark:bg-slate-800/90 px-3 py-1 text-xs font-bold text-accent backdrop-blur-sm">
+                <div className="absolute top-4 right-4 rounded-full bg-white/90 px-4 py-1.5 text-[10px] font-black uppercase tracking-widest text-[#2587a7] backdrop-blur-md shadow-sm">
                     {product.category}
                 </div>
             </div>
 
-            <div className="px-2">
-                <h3 className="mb-2 text-xl font-bold dark:text-white line-clamp-1">{product.name}</h3>
-                <p className="mb-4 text-sm text-secondary dark:text-slate-400 line-clamp-2 min-h-[2.5rem]">
+            <div className="px-3">
+                <h3 className="mb-2 text-xl font-black text-[#242553] line-clamp-1 leading-tight">{product.name}</h3>
+                <p className="mb-6 text-sm text-slate-500 font-medium line-clamp-2 min-h-[2.5rem] leading-relaxed">
                     {product.description}
                 </p>
 
                 <div className="flex items-center justify-between">
-                    <span className="text-2xl font-black text-primary dark:text-white">
+                    <span className="text-2xl font-black text-[#242553]">
                         ${product.price.toFixed(2)}
                     </span>
                     <button
                         onClick={() => addToCart(product)}
-                        className="flex h-12 w-12 items-center justify-center rounded-full bg-accent text-white shadow-lg shadow-blue-500/25 transition-all hover:bg-blue-600 active:scale-95"
+                        className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#2587a7] text-white shadow-lg shadow-[#2587a7]/30 transition-all hover:bg-[#1e6d87] active:scale-95 group-hover:rotate-6"
                     >
                         <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
                         </svg>
                     </button>
                 </div>

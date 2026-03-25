@@ -50,25 +50,25 @@ export default function AdminDashboard() {
     return (
         <div className="space-y-8">
             <div>
-                <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Dashboard Overview</h1>
-                <p className="text-slate-500 dark:text-slate-400 mt-1 font-medium">Welcome back! Here's what's happening today.</p>
+                <h1 className="text-3xl font-black text-[#242553] tracking-tight">Dashboard Overview</h1>
+                <p className="text-slate-500 mt-1 font-medium">Welcome back! Here's what's happening today.</p>
             </div>
 
             {loading ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 animate-pulse">
                     {[...Array(4)].map((_, i) => (
-                        <div key={i} className="h-32 bg-slate-100 dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-800" />
+                        <div key={i} className="h-32 bg-slate-100 rounded-2xl border border-slate-200" />
                     ))}
                 </div>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {cards.map((card) => (
-                        <div key={card.name} className={`p-6 bg-white dark:bg-slate-900 rounded-2xl border ${card.color.split(' ')[2]} dark:border-slate-800 shadow-sm transition-all hover:shadow-md`}>
+                        <div key={card.name} className={`p-6 bg-white rounded-2xl border ${card.color.split(' ')[2]} shadow-sm transition-all hover:shadow-md`}>
                             <div className="flex items-center justify-between mb-4">
                                 <span className="text-2xl">{card.icon}</span>
                                 <span className={`text-xs font-black uppercase tracking-widest ${card.color.split(' ')[1]}`}>{card.name}</span>
                             </div>
-                            <div className="text-3xl font-black text-slate-900 dark:text-white tracking-tighter">
+                            <div className="text-3xl font-black text-[#242553] tracking-tighter">
                                 {card.value}
                             </div>
                         </div>
@@ -78,18 +78,18 @@ export default function AdminDashboard() {
 
             {/* Quick Actions or Recent Activity placeholder */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div className="bg-white dark:bg-slate-900 p-8 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-sm">
-                    <h3 className="text-xl font-black text-slate-900 dark:text-white mb-6 tracking-tight">Recent Activity</h3>
+                <div className="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm">
+                    <h3 className="text-xl font-black text-[#242553] mb-6 tracking-tight">Recent Activity</h3>
                     <div className="space-y-4">
-                        <p className="text-sm text-slate-500 dark:text-slate-400 italic font-medium">No recent activity detected.</p>
+                        <p className="text-sm text-slate-500 italic font-medium">No recent activity detected.</p>
                     </div>
                 </div>
-                <div className="bg-gradient-to-br from-primary to-blue-700 p-8 rounded-[2rem] text-white shadow-xl shadow-blue-500/20 relative overflow-hidden group">
+                <div className="bg-gradient-to-br from-[#242553] to-[#2587a7] p-8 rounded-[2rem] text-white shadow-xl shadow-[#242553]/20 relative overflow-hidden group">
                      {/* Decorative waves or blobs */}
                     <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-20 -mt-20 blur-3xl transition-all group-hover:bg-white/20" />
                     
                     <h3 className="text-xl font-bold mb-4 relative z-10">Administrative Tips</h3>
-                    <ul className="space-y-3 text-sm text-blue-100 relative z-10 font-medium">
+                    <ul className="space-y-3 text-sm text-white/70 relative z-10 font-medium">
                         <li>• Keep your inventory up to date to avoid overselling.</li>
                         <li>• High-quality images significantly increase conversion rates.</li>
                         <li>• Respond to orders quickly for better customer satisfaction.</li>
