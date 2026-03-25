@@ -28,6 +28,16 @@ const ProductSchema = new mongoose.Schema({
 
 const Product = mongoose.models.Product || mongoose.model("Product", ProductSchema);
 
+const AdminSchema = new mongoose.Schema({
+    username: { type: String, required: true, unique: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    resetOtp: { type: String },
+    otpExpiry: { type: Date },
+}, { timestamps: true });
+
+const Admin = mongoose.models.Admin || mongoose.model("Admin", AdminSchema);
+
 const imagesToUpload = [
     {
         filePath: "public/stationery_category_webp_1772550778032.png",
@@ -68,6 +78,29 @@ async function seed() {
         // Clear existing products to avoid duplicates during test
         await Product.deleteMany({});
         console.log("Cleared existing products.");
+
+        // Check for existing Admin
+        const adminCount = await Admin.countDocuments();
+        if (adminCount === 0) {
+            console.log("No admin found. Creating default admin...");
+            const username = process.env.ADMIN_USERNAME || "admin";
+            const password = process.env.ADMIN_PASSWORD || "password";
+            
+            // Require bcryptjs inside the function since this is a script
+            const bcrypt = require("bcryptjs");
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(password, salt);
+
+            const defaultAdmin = new Admin({
+                username,
+                email: process.env.SMTP_USER || "admin@example.com",
+                password: hashedPassword,
+            });
+            await defaultAdmin.save();
+            console.log(`Default admin created: ${username}`);
+        } else {
+            console.log("Admin account already exists. Skipping admin seed.");
+        }
 
         for (const item of imagesToUpload) {
             const absolutePath = path.resolve(item.filePath);
