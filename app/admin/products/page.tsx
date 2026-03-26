@@ -24,6 +24,7 @@ export default function AdminProducts() {
     const [imagePreviews, setImagePreviews] = useState<string[]>([]);
     const [existingImages, setExistingImages] = useState<string[]>([]);
     const [uploading, setUploading] = useState(false);
+    const [saving, setSaving] = useState(false);
     const [uploadError, setUploadError] = useState("");
     const [isDragging, setIsDragging] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -98,20 +99,20 @@ export default function AdminProducts() {
         if (error) setUploadError(error);
         else setUploadError("");
 
-        setImageFiles((prev) => [...prev, ...newFiles]);
-        setImagePreviews((prev) => [...prev, ...newPreviews]);
+        setImageFiles((prev: File[]) => [...prev, ...newFiles]);
+        setImagePreviews((prev: string[]) => [...prev, ...newPreviews]);
     };
 
     const removeNewImage = (index: number) => {
-        setImageFiles((prev) => prev.filter((_, i) => i !== index));
-        setImagePreviews((prev) => {
+        setImageFiles((prev: File[]) => prev.filter((_, i: number) => i !== index));
+        setImagePreviews((prev: string[]) => {
             URL.revokeObjectURL(prev[index]);
-            return prev.filter((_, i) => i !== index);
+            return prev.filter((_, i: number) => i !== index);
         });
     };
 
     const removeExistingImage = (index: number) => {
-        setExistingImages((prev) => prev.filter((_, i) => i !== index));
+        setExistingImages((prev: string[]) => prev.filter((_, i: number) => i !== index));
     };
 
     const handleDrop = (e: React.DragEvent) => {
@@ -124,7 +125,9 @@ export default function AdminProducts() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (saving || uploading) return;
 
+        setSaving(true);
         let uploadedUrls: string[] = [];
 
         // Upload new images
@@ -145,6 +148,7 @@ export default function AdminProducts() {
                         const err = await uploadRes.json();
                         setUploadError(err.error || "Upload failed. Please try again.");
                         setUploading(false);
+                        setSaving(false);
                         return;
                     }
 
@@ -154,6 +158,7 @@ export default function AdminProducts() {
             } catch {
                 setUploadError("Network error during upload. Please try again.");
                 setUploading(false);
+                setSaving(false);
                 return;
             }
             setUploading(false);
@@ -164,6 +169,7 @@ export default function AdminProducts() {
 
         if (allImages.length === 0) {
             setUploadError("Please add at least one product image.");
+            setSaving(false);
             return;
         }
 
@@ -182,9 +188,15 @@ export default function AdminProducts() {
             if (res.ok) {
                 closeModal();
                 fetchProducts();
+            } else {
+                const err = await res.json();
+                setUploadError(err.error || "Failed to save product. Please check your inputs.");
             }
         } catch (error) {
             console.error("Error saving product:", error);
+            setUploadError("Network error while saving product.");
+        } finally {
+            setSaving(false);
         }
     };
 
@@ -193,10 +205,12 @@ export default function AdminProducts() {
         setEditingProduct(null);
         setFormData({ ...EMPTY_FORM });
         setImageFiles([]);
-        imagePreviews.forEach((p) => URL.revokeObjectURL(p));
+        imagePreviews.forEach((p: string) => URL.revokeObjectURL(p));
         setImagePreviews([]);
         setExistingImages([]);
         setUploadError("");
+        setUploading(false);
+        setSaving(false);
     };
 
     const totalImagesCount = existingImages.length + imagePreviews.length;
@@ -315,7 +329,7 @@ export default function AdminProducts() {
                                     <div>
                                         <p className="text-xs font-bold text-slate-500 mb-2">Current Images</p>
                                         <div className="grid grid-cols-3 gap-3">
-                                            {existingImages.map((url, idx) => (
+                                            {existingImages.map((url: string, idx: number) => (
                                                 <div key={`existing-${idx}`} className="relative group/img aspect-square rounded-2xl overflow-hidden border border-slate-100">
                                                     <Image src={url} alt={`Product image ${idx + 1}`} fill className="object-cover" />
                                                     <button
@@ -341,7 +355,7 @@ export default function AdminProducts() {
                                     <div>
                                         <p className="text-xs font-bold text-emerald-600 mb-2">New Images to Upload</p>
                                         <div className="grid grid-cols-3 gap-3">
-                                            {imagePreviews.map((preview, idx) => (
+                                            {imagePreviews.map((preview: string, idx: number) => (
                                                 <div key={`new-${idx}`} className="relative group/img aspect-square rounded-2xl overflow-hidden border-2 border-dashed border-emerald-300 bg-emerald-50/30">
                                                     <Image src={preview} alt={`New image ${idx + 1}`} fill className="object-cover" />
                                                     <button
@@ -412,13 +426,18 @@ export default function AdminProducts() {
 
                             <button
                                 type="submit"
-                                disabled={uploading}
+                                disabled={uploading || saving}
                                 className="w-full bg-[#242553] hover:opacity-90 disabled:opacity-60 text-white font-black py-4 rounded-3xl shadow-xl shadow-[#242553]/20 transition-all active:scale-[0.98] flex items-center justify-center gap-3"
                             >
                                 {uploading ? (
                                     <>
                                         <div className="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                                         Uploading Images…
+                                    </>
+                                ) : saving ? (
+                                    <>
+                                        <div className="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                        Saving Product…
                                     </>
                                 ) : (
                                     editingProduct ? "Update Product" : "Add Product"
