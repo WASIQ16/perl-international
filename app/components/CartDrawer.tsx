@@ -73,7 +73,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                                 <div key={item._id || item.id} className="flex gap-6 group">
                                     <div className="relative h-28 w-28 shrink-0 overflow-hidden rounded-[1.5rem] bg-slate-50 border border-slate-100">
                                         <Image
-                                            src={item.image}
+                                            src={(item.images && item.images.length > 0 ? item.images[0] : item.image) || "/placeholder.png"}
                                             alt={item.name}
                                             fill
                                             className="object-cover"

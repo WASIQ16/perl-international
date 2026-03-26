@@ -2,11 +2,22 @@ import { NextResponse } from "next/server";
 import dbConnect from "@/lib/db";
 import Product from "@/models/Product";
 
+// Normalize: ensure images array exists
+function normalizeImages(data: any) {
+    if (data.images && data.images.length > 0) {
+        // Set legacy image field to first image for backward compat
+        data.image = data.images[0];
+    } else if (data.image) {
+        data.images = [data.image];
+    }
+    return data;
+}
+
 // POST: Add a new product
 export async function POST(req: Request) {
     try {
         await dbConnect();
-        const data = await req.json();
+        const data = normalizeImages(await req.json());
         
         const product = await Product.create(data);
         return NextResponse.json(product, { status: 201 });
@@ -19,7 +30,8 @@ export async function POST(req: Request) {
 export async function PUT(req: Request) {
     try {
         await dbConnect();
-        const { id, ...updateData } = await req.json();
+        const { id, ...rawData } = await req.json();
+        const updateData = normalizeImages(rawData);
         
         if (!id) {
             return NextResponse.json({ error: "Product ID is required" }, { status: 400 });
@@ -59,3 +71,4 @@ export async function DELETE(req: Request) {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }
+

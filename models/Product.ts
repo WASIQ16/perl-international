@@ -17,7 +17,11 @@ const ProductSchema = new Schema({
     },
     image: {
         type: String,
-        required: [true, "Please provide an image URL for this product."],
+        default: "",
+    },
+    images: {
+        type: [String],
+        default: [],
     },
     description: {
         type: String,
@@ -25,6 +29,15 @@ const ProductSchema = new Schema({
     },
 }, {
     timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+});
+
+// Virtual: always return a valid images list (merges legacy `image` field)
+ProductSchema.virtual("allImages").get(function () {
+    if (this.images && this.images.length > 0) return this.images;
+    if (this.image) return [this.image];
+    return [];
 });
 
 export default models.Product || model("Product", ProductSchema);

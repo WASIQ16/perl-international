@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { Product } from "../data/products";
 import { useCart } from "../context/CartContext";
 import { useSettings } from "../context/SettingsContext";
@@ -13,26 +14,33 @@ export default function ProductCard({ product }: ProductCardProps) {
     const { addToCart } = useCart();
     const { showPrices } = useSettings();
 
+    const productId = product._id || product.id;
+    const productImage = (product.images && product.images.length > 0) ? product.images[0] : product.image;
+
     return (
         <div className="group relative rounded-[2rem] bg-white border border-slate-100 p-4 transition-all duration-500 hover:shadow-2xl hover:shadow-[#242553]/5 hover:-translate-y-2 hover:border-[#2587a7]/20">
-            <div className="relative mb-6 h-64 w-full overflow-hidden rounded-[1.5rem] bg-slate-50">
-                <Image
-                    src={product.image}
-                    alt={product.name}
-                    fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                />
-                <div className="absolute top-4 right-4 rounded-full bg-white/90 px-4 py-1.5 text-[10px] font-black uppercase tracking-widest text-[#2587a7] backdrop-blur-md shadow-sm">
-                    {product.category}
+            <Link href={`/product/${productId}`} className="block">
+                <div className="relative mb-6 h-64 w-full overflow-hidden rounded-[1.5rem] bg-slate-50">
+                    <Image
+                        src={productImage || "/placeholder.png"}
+                        alt={product.name}
+                        fill
+                        className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                    <div className="absolute top-4 right-4 rounded-full bg-white/90 px-4 py-1.5 text-[10px] font-black uppercase tracking-widest text-[#2587a7] backdrop-blur-md shadow-sm">
+                        {product.category}
+                    </div>
                 </div>
-            </div>
+
+                <div className="px-3">
+                    <h3 className="mb-2 text-xl font-black text-[#242553] line-clamp-1 leading-tight">{product.name}</h3>
+                    <p className="mb-6 text-sm text-slate-500 font-medium line-clamp-2 min-h-[2.5rem] leading-relaxed">
+                        {product.description}
+                    </p>
+                </div>
+            </Link>
 
             <div className="px-3">
-                <h3 className="mb-2 text-xl font-black text-[#242553] line-clamp-1 leading-tight">{product.name}</h3>
-                <p className="mb-6 text-sm text-slate-500 font-medium line-clamp-2 min-h-[2.5rem] leading-relaxed">
-                    {product.description}
-                </p>
-
                 <div className="flex items-center justify-between mt-auto">
                     {showPrices ? (
                         <span className="text-2xl font-black text-[#242553]">
@@ -56,3 +64,4 @@ export default function ProductCard({ product }: ProductCardProps) {
         </div>
     );
 }
+

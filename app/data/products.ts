@@ -4,7 +4,8 @@ export interface Product {
     name: string;
     price: number;
     category: "Stationery" | "Electronics" | "Crockery" | "Disposable Items";
-    image: string;
+    image?: string;
+    images?: string[];
     description: string;
 }
 
